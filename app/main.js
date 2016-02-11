@@ -23,7 +23,7 @@ app.on('window-all-closed', function() {
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 app.on('ready', function() {
-  child = spawn('../goop');
+  child = spawn('./goop');
 
   // Create the browser window.
   mainWindow = new BrowserWindow({

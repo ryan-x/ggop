@@ -3,13 +3,13 @@ package main
 import (
 	"flag"
 	"log"
-	"math"
 	"net/http"
 	"path"
 	"strings"
 	"time"
 
 	"github.com/gorilla/websocket"
+	"github.com/ryan-x/goop/physics"
 )
 
 //go:generate browserify frontend/index.js -o static/bundle.js
@@ -36,41 +36,10 @@ var upgrader = websocket.Upgrader{
 	CheckOrigin: func(r *http.Request) bool { return true },
 }
 
-type Direction int
-
-const (
-	DirPosi Direction = 1
-	DirNega           = -1
-)
-
-type Vector float64
-
-func (f Vector) Direction() Direction {
-	if f > 0 {
-		return DirPosi
-	} else {
-		return DirNega
-	}
-}
-
-func (f Vector) Magnitude() float64 {
-	return math.Abs(float64(f))
-}
-
-func AddVectors(vectors ...Vector) Vector {
-	var result Vector
-
-	for _, v := range vectors {
-		result += v
-	}
-
-	return result
-}
-
 type Rect struct {
 	ID, Height, Width int
 	X, Y              float64
-	XVector, YVector  Vector
+	XVector, YVector  physics.Vector
 }
 
 func (r *Rect) Tick() {
@@ -83,15 +52,15 @@ func (r *Rect) Tick() {
 	}
 }
 
-func Friction(v Vector) Vector {
+func Friction(v physics.Vector) physics.Vector {
 	if v.Magnitude() < 1 {
-		return Vector(0.0)
+		return physics.Vector(0.0)
 	}
 
-	if v.Direction() == DirPosi {
-		return AddVectors(v, Vector(-1.0))
+	if v.Direction() == physics.PositiveDirection {
+		return physics.AddVectors(v, physics.Vector(-1.0))
 	}
-	return AddVectors(v, Vector(1.0))
+	return physics.AddVectors(v, physics.Vector(1.0))
 }
 
 func messages(w http.ResponseWriter, r *http.Request) {
@@ -114,15 +83,15 @@ func messages(w http.ResponseWriter, r *http.Request) {
 			msg := string(message)
 
 			if msg == KeyRight {
-				rect.XVector = AddVectors(rect.XVector, Vector(20))
+				rect.XVector = physics.AddVectors(rect.XVector, physics.Vector(20))
 			} else if msg == KeyLeft {
-				rect.XVector = AddVectors(rect.XVector, Vector(-20.0))
+				rect.XVector = physics.AddVectors(rect.XVector, physics.Vector(-20.0))
 			}
 
 			if msg == KeyUp {
-				rect.YVector = AddVectors(rect.YVector, Vector(20))
+				rect.YVector = physics.AddVectors(rect.YVector, physics.Vector(20))
 			} else if msg == KeyDown {
-				rect.YVector = AddVectors(rect.YVector, Vector(-20))
+				rect.YVector = physics.AddVectors(rect.YVector, physics.Vector(-20))
 			}
 
 		}

@@ -1,0 +1,18 @@
+html, body, body * {
+  margin: 0; padding: 0;
+}
+
+body {
+  overflow: hidden;
+}
+
+div {
+  position: absolute;
+  bottom: 0px;
+  border: 1px solid red;
+  transform-origin: 100% 0%;
+  left: 0;
+  background: rgba(255,0,0,.4);
+}
+
+

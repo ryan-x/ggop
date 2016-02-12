@@ -13,8 +13,6 @@
   },
   "scripts": {
     "start": "budo index.js:bundle.js --live",
-    "build": "mkdir -p out && browserify index.js | uglifyjs -cm > out/notify.js",
-    "bindata": "go-bindata -o data.go -pkg frontend -prefix out/ out/",
-    "build:all": "npm run build && npm run bindata"
+    "build": "mkdir -p ../static && browserify index.js | uglifyjs -cm > ../static/bundle.js"
   }
 }

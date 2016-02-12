@@ -1,11 +1,15 @@
 var backoff = require("./backoff");
 
 module.exports = function() {
+  var socket;
   return {
     onmessage: function(data) {},
+    send: function(data) {
+      socket.send(data);
+    },
     connect: function(address) {
       var messengerBackoff = backoff(function(delay) {
-        var socket = new WebSocket(address);
+        socket = new WebSocket(address);
         socket.onopen = onopen;
         socket.onclose = onclose;
         socket.onmessage = onmessage;

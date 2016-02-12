@@ -41,6 +41,10 @@
     createBlock(msg);
   }
 
+  body.addEventListener('keydown', function(e) {
+    messenger.send(e.keyCode);
+  }, false);
+
   var wsURL;
   // This is intended for development only
   if (window.notification_url !== undefined) {

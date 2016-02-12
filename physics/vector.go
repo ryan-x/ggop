@@ -2,6 +2,10 @@ package physics
 
 import "math"
 
+var (
+	Gravity Vector = Vector(-5)
+)
+
 type Direction int
 
 const (
